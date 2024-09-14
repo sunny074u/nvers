@@ -12,10 +12,12 @@ class TestDataTransformation(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # Initialize a Spark session for the test class
+        # Initialize a Spark session for the test class with Delta support
         cls.spark = SparkSession.builder \
             .appName("PySpark Unit Test") \
             .master("local[*]") \
+            .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+            .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
             .getOrCreate()
         
         cls.spark.conf.set("spark.sql.shuffle.partitions", "1")
